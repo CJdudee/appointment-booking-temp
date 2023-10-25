@@ -1,27 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-
-.closed-day {
-    background-color: #550000;
-    color: white
-
-}
-
-.closed-day:hover {
-    background-color: #6d0000;
-    color: white;
-
-
-}
-
-.closed-day:enabled:focus {
-    background-color: #8a0000;
-    color: white;
-}
-
-react-calendar {
+.react-calendar {
     width: 450px;
     max-width: 100%;
     background: white;
@@ -197,20 +174,4 @@ react-calendar {
   }
   .react-calendar--selectRange .react-calendar__tile--hover {
     background-color: rgb(238 242 255);
-  }
-
-
-  .closed-day {
-    background-color: #550000;
-    color: white;
-  }
-  
-  .closed-day:hover {
-    background-color: #6d0000 !important;
-    color: white !important;
-  }
-  
-  .closed-day:enabled:focus {
-    background-color: #8a0000 !important;
-    color: white;
   }
