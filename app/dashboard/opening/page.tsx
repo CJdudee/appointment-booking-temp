@@ -18,17 +18,6 @@ interface openingProps {
   mutate: any
 }
 
-// export async function getServerSideProps() {
-
-//   const {data: days, mutate} = useSWR("/api/frontend/days", fetcher)
-
-  
-
-//   if (!(days.length === 7)) throw new Error('All days to the database')
-
-//   return { props: { days }}
-
-// }
 
 async function sendRequest(url: any, { arg }: { arg: { days: any }}) {
   return await fetch(url, {
@@ -44,7 +33,7 @@ async function sendCloseDate(url: any, { arg }: { arg: { date: Date }}) {
 }
 async function sendDeleteDate(url: any, { arg }: { arg: { date: Date }}) {
   return await fetch(url, {
-    method: 'POST',
+    method: 'DELETE',
     body: JSON.stringify({date: arg.date})
   }).then(res => res.json())
 }
@@ -96,40 +85,52 @@ useEffect(() => {
         //  console.log((new Date(c.date)))
       })
 
-      // closedDays.map((c: any) => {
-      //   console.log(new Date(c))
-      // })
- }
+    }
 
     filteringDate()
 
     setClosedDays(dayisClosedArray)
-    //console.log(dayisClosedArray)
-    // console.log(closedDaysFetch)
     console.log(dayisClosedArray)
 
   }, [closedDaysFetch])
 
+  // might have to make a array to see if selectedDate is in closedDays.map() then push it from there to a new array to check and if the array has length its true else false
+
   useEffect(() => {
     if(!selectedDate && !closedDays) return 
 
+    //this is for the date that is returned and set from the calendar which doesn't match if the date isn't a string so the date has to be turned into a string //refactoring is very needed for this
+    let closedDaysArray: any[] = []
+    closedDays.map((c: any) => {if ( c == `${selectedDate}`) closedDaysArray.push(c); else null})
+
+    console.log(( selectedDate ))
     // async function workplz() {
-    // if ( closedDays?.includes((selectedDate))) {
-    if (  closedDays.map((c:any) => {return c}) == selectedDate) {
+    if (closedDaysArray.length) {
+
+    // if ( closedDays.includes(`${selectedDate}`)) {
+    // if ( closedDays.indexOf(selectedDate) !== -1) {
+
+    // if (  closedDays.map((c:Date) => { console.log(typeof c, typeof selectedDate, c == selectedDate, c == 'Tue Oct 31 2023 00:00:00 GMT-0700 (Pacific Daylight Time)'); return c }) == selectedDate) {
+    // if ( closedDays.map((c:Date) => { if ( c == `${selectedDate}`) return c; else return console.log(c == `${selectedDate}`, 'wooooo') }) ) {
+
+    // if ( closedDays.map(c => {return c}) == `${selectedDate}` ) {
+
+    // if (  closedDays.map((c:Date) => { return c }) == new Date(`${selectedDate}`)) {
     // if ( closedDays?.map((C: any) => {return C}) == selectedDate) {
+    
       setDayIsClosed(true)
+      closedDaysArray = []
     } else {
       setDayIsClosed(false)
-      // console.log(closedDays.includes(formatISO(date)))
-      // console.log(selectedDate)
-      // console.log(await closedDays.includes((date)))
-      console.log(closedDays?.includes((selectedDate)))
-      closedDays.map((c: any) => {
-        console.log(new Date(c))
-      })
-      // console.log(closedDays?.includes((selectedDate)))
-      // console.log(closedDays)
-      console.log(( selectedDate)?.toString())
+      closedDaysArray = []
+      
+      
+      // closedDays.map((c: any) => {
+      //   console.log(new Date(c))
+      // })
+     
+      // console.log(( selectedDate?.toString()))
+      // console.log(dayIsClosed, 'it work')
     }
       
       
@@ -139,52 +140,7 @@ useEffect(() => {
     // workplz()
   }, [selectedDate])
 
-  //a useEffect to see if the selectedDate is part of the closedDays to change the mutation to Open the date back up 
-
-  // useEffect(  () => {
-  //   if(!selectedDate) return
-
-  //   async function isDayClosed() {
-  //     if(!selectedDate) return false
-
-  //     //let dayIsClosed: any[] = []
-
-  //     const dayIsClosedPush =  selectedDate &&   await closedDays?.map(async (c: any) => {
-  //   //   // if(c.date == (formatISO(selectedDate))) return true 
-      
-  //   // //   else {
-  //   // //     console.log(c.date)
-  //   // //     console.log(formatISO(selectedDate))
-  //   // //     return false
-  //   // //   }
-  //   // // })
-  //       // if(c.date == (formatISO(selectedDate)))  return dayIsClosed.push(formatISO(selectedDate))
-  //       return c.date
-        
-  //   //     console.log(c.date)
-  //     })
-  //     const dayIsClosed =  await dayIsClosedPush?.includes(formatISO(selectedDate).toString())
-
-  //     console.log(closedDays)
-  //     console.log(dayIsClosed)
-  //      console.log( formatISO(selectedDate))
-
-  //     setDayIsClosed(dayIsClosed)
-
-  //     // if(!dayIsClosed.length) setDayIsClosed(false)
-
-  //     // setDayIsClosed(true)
-      
-  //   }
-    // const dayIsClosed =  selectedDate && closedDays?.map((c: any) => {
-    //   if(c == (formatISO(selectedDate))) return true 
-    //   else return false
-    // })
-  //   isDayClosed()
-  //   // const dayIsClosed = isDayClosed()
-    
-    
-  // }, [selectedDate])
+  
 
 
   useEffect(  () => {
@@ -221,7 +177,7 @@ useEffect(() => {
         <p className={`${!enabled ? 'text-lg' : ''}`}>Opening times</p>
 
         <Switch checked={enabled} onChange={setEnabled} className={`${enabled ? 'bg-indigo-500' : 'bg-gray-200'} 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 `}>
-        <span className=''>Use setting</span>
+        <span className='sr-only'>Use setting</span>
         <span
             aria-hidden='true'
             className={
@@ -238,7 +194,7 @@ useEffect(() => {
 
 
         { !enabled ? (
-          <div>
+          <div className='my-12 flex flex-col gap-8'>
             {days?.map((day: any) => {
               const changeTime = _changeTime(day) 
               
@@ -277,7 +233,7 @@ useEffect(() => {
           // Opening days options
         <div className='mt-6 flex flex-col items-center gap-6'>
 
-          <div>
+          
           
           {closedDays && <Calendar
           minDate={now}
@@ -286,9 +242,17 @@ useEffect(() => {
           onClickDay={  (date: any) => {setSelectedDate(date)}}
           tileClassName={({ date }) => {
             //console.log(closedDays)
+            let closedDaysArray: any[] = []
+            closedDays.map((c: any) => {if ( c == `${date}`) closedDaysArray.push(c); else null})
+
+            
+            //console.log(closedDaysArray, 'for css')
+          if (closedDaysArray.length) {
 
             //need fixing
-            return closedDays?.includes(formatISO(date)) ? 'closed-day' : null
+            return 'closed-day' 
+            // return closedDays?.includes(`${date}`) ? 'closed-day' : null
+          } else null
           }}
           />}
 
@@ -307,7 +271,7 @@ useEffect(() => {
           </Button> }
           {/* <button onClick={() => setDayIsClosed(!dayIsClosed)}>Change true or false</button> */}
 
-          </div>
+          
 
         </div>
         

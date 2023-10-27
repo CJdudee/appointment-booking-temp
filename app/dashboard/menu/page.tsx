@@ -7,7 +7,7 @@ import Select, { MultiValue } from 'react-select'
 import { MAX_FILE_SIZE } from '../../constants/config'
 import { Categories } from '@/utils/types'
 import useSWR from 'swr'
-import { selectOptions } from '@/utils/helpers'
+import { fetcher, selectOptions } from '@/utils/helpers'
 
 const DynamicSelect = dynamic(() => import('react-select'), { ssr: false})
 
@@ -27,8 +27,7 @@ const initialInput = {
     file: undefined
 
 }
-// @ts-ignore
-const fetcher = (...args: any) => fetch(...args).then(res => res.json())
+
 
 const Menu: FC<MenuProps> = ({}) => {
 
