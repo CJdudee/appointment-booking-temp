@@ -23,12 +23,17 @@ Needed to run
 env.local
 
 This is for the sign up page 
+
 ADMIN_EMAIL (or anything)
+
 ADMIN_PASSWORD
 
 AWS_ACCESS_KEY_ID
+
 AWS_SECRET_ACCESS_KEY
+
 STRIPE_SECRET_KEY
+
 MONGODB_URI
 
 
